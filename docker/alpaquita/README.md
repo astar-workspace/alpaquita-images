@@ -1,3 +1,20 @@
+# What is Alpaquita Linux?
+
+Alpaquita Linux is a lightweight operating system optimized for the deployment of cloud native applications. Based on Alpine Linux, it offers the flexibility of choosing between `glibc` and `musl` for the standard C library (`stdlib`) implementation.
+
+
+>It is an optimal solution for running applications with various workloads >and is characterized by
+>
+> - Userspace binaries protection
+> - Four malloc implementations in total
+> - Optimized standard C library implementation ‘musl perf’, both small and >performant
+> - Base image size of 3.22MB, which is perfect for running small and performant containers
+> - Docker and QEMU support
+>
+> Alpaquita Linux is developed and mantained by [BellSoft](https://bell-sw.com).
+
+Quote from [bellsoft/alpaquita-linux-base](https://hub.docker.com/r/bellsoft/alpaquita-linux-base)
+
 # Latest tags
 
 ## 23
@@ -21,23 +38,6 @@ Aliases:
 - `stream-musl`
 
 `latest` is `stream-musl`
-
-# What is Alpaquita Linux?
-
-Alpaquita Linux is a lightweight operating system optimized for the deployment of cloud native applications. Based on Alpine Linux, it offers the flexibility of choosing between `glibc` and `musl` for the standard C library (`stdlib`) implementation.
-
-
->It is an optimal solution for running applications with various workloads >and is characterized by
->
-> - Userspace binaries protection
-> - Four malloc implementations in total
-> - Optimized standard C library implementation ‘musl perf’, both small and >performant
-> - Base image size of 3.22MB, which is perfect for running small and performant containers
-> - Docker and QEMU support
->
-> Alpaquita Linux is developed and mantained by [BellSoft](https://bell-sw.com).
-
-Quote from [bellsoft/alpaquita-linux-base](https://hub.docker.com/r/bellsoft/alpaquita-linux-base)
 
 ## Why another Alpaquita Linux container?
 

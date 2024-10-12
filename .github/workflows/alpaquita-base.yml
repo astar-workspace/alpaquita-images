@@ -14,6 +14,14 @@ on:
         description: Version to use
         required: true
         type: string
+      stable:
+        description: Push as upstream stable
+        required: true
+        type: boolean
+      latest:
+        description: Push as upstream latest
+        required: true
+        type: boolean
       release-tag:
         description: Release tag to use
         required: true
@@ -56,6 +64,8 @@ jobs:
           tags: |
             astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}-${{github.event.inputs.release-tag}}
             astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}
+            ${{ github.event.inputs.stable == 'true' && 'astarivi/alpaquita:stable-${{ github.event.inputs.stdlib }}' || '' }}
+            ${{ github.event.inputs.latest == 'true' && 'astarivi/alpaquita:latest' || '' }}
           build-args: |
             STDLIB=${{ github.event.inputs.stdlib }}
             VERSION=${{ github.event.inputs.version }}
@@ -66,7 +76,7 @@ jobs:
         uses: meeDamian/sync-readme@v1.0.6
         with:
           user: ${{ secrets.DOCKERHUB_USERNAME }}
-          pass: ${{ secrets.DOCKERHUB_TOKEN }}
+          pass: ${{ secrets.DOCKERHUB_PASS }}
           slug: astarivi/alpaquita
           readme: ./docker/alpaquita/README.md
           description: "Alpaquita Linux: a lightweight, high-performance OS optimized for speed and efficiency"
