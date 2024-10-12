@@ -53,10 +53,20 @@ jobs:
           file: docker/alpaquita/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}-${{github.event.inputs.release-tag}}
+          tags: |
+            astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}-${{github.event.inputs.release-tag}}
+            astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}
           build-args: |
             STDLIB=${{ github.event.inputs.stdlib }}
             VERSION=${{ github.event.inputs.version }}
             RELEASE_X64=${{ github.event.inputs.release-x64 }}
             RELEASE_AARCH64=${{ github.event.inputs.release-aarch64 }}
 
+      - name: Sync README.md
+        uses: meeDamian/sync-readme@v1.0.6
+        with:
+          user: ${{ secrets.DOCKERHUB_USERNAME }}
+          pass: ${{ secrets.DOCKERHUB_TOKEN }}
+          slug: astarivi/alpaquita
+          readme: ./docker/alpaquita/README.md
+          description: "Alpaquita Linux: a lightweight, high-performance OS optimized for speed and efficiency"
