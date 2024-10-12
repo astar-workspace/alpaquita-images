@@ -1,4 +1,4 @@
-FROM docker.io/busybox:1.37.0-musl AS builder
+FROM docker.io/bellsoft/alpaquita-linux-base:stream-glibc AS builder
 
 ARG STDLIB
 ARG VERSION
@@ -7,7 +7,8 @@ ARG RELEASE_AARCH64
 
 WORKDIR /root
 
-RUN ARCH=$(uname -m) && \
+RUN apk add wget && \
+    ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
         RELEASE="${RELEASE_X64}"; \
     elif [ "$ARCH" = "aarch64" ]; then \
