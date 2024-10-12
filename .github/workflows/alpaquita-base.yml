@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       stdlib:
-          type: choice
-          description: Standard library
-          required: true
-          options:
+        type: choice
+        description: Standard library
+        required: true
+        options:
           - musl
           - glibc
       version:
