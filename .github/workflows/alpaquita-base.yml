@@ -64,7 +64,7 @@ jobs:
           tags: |
             astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}-${{github.event.inputs.release-tag}}
             astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}
-            ${{ github.event.inputs.stable == 'true' && 'astarivi/alpaquita:stable-${{ github.event.inputs.stdlib }}' || '' }}
+            ${{ github.event.inputs.extra-tag == 'true' && format('astarivi/alpaquita:stable-{0}', github.event.inputs.stdlib) || '' }}
             ${{ github.event.inputs.latest == 'true' && 'astarivi/alpaquita:latest' || '' }}
           build-args: |
             STDLIB=${{ github.event.inputs.stdlib }}
