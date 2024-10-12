@@ -55,8 +55,8 @@ jobs:
           push: true
           tags: astarivi/alpaquita:${{github.event.inputs.version}}-${{ github.event.inputs.stdlib }}-${{github.event.inputs.release-tag}}
           build-args: |
-          STDLIB=${{ github.event.inputs.stdlib }}
-          VERSION=${{ github.event.inputs.version }}
-          RELEASE_X64=${{ github.event.inputs.release-x64 }}
-          RELEASE_AARCH64=${{ github.event.inputs.release-aarch64 }}
+            STDLIB=${{ github.event.inputs.stdlib }}
+            VERSION=${{ github.event.inputs.version }}
+            RELEASE_X64=${{ github.event.inputs.release-x64 }}
+            RELEASE_AARCH64=${{ github.event.inputs.release-aarch64 }}
 
