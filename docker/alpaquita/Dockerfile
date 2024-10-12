@@ -1,4 +1,4 @@
-FROM docker.io/bellsoft/alpaquita-linux-base:stream-glibc AS builder
+FROM docker.io/astarivi/alpaquita:23-glibc-1.0 AS builder
 
 ARG STDLIB
 ARG VERSION
