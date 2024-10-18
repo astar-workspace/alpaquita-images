@@ -1,0 +1,76 @@
+name: Build Stream Alpaquita Linux Base Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - docker/alpaquita/src/latest_stream.json
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Load image JSON properties
+        uses: antifree/json-to-variables@8de3c6b94715a24fe65f29640b4e292a4add22a3
+        with:
+          filename: 'docker/alpaquita/src/latest_stream.json'
+          prefix: 'dimage'
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+    
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push musl
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/alpaquita/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            astarivi/alpaquita:${{ env.dimage_version }}-musl-${{ env.dimage_tag }}
+            astarivi/alpaquita:${{ env.dimage_version }}-musl
+            astarivi/alpaquita:latest
+          build-args: |
+            STDLIB=musl
+            VERSION=${{ env.dimage_version }}
+            RELEASE_X64=${{ env.dimage_releases_musl_x86_64_tag }}
+            RELEASE_AARCH64=${{ env.dimage_releases_musl_aarch64_tag }}
+
+      - name: Build and push glibc
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/alpaquita/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            astarivi/alpaquita:${{ env.dimage_version }}-glibc-${{ env.dimage_tag }}
+            astarivi/alpaquita:${{ env.dimage_version }}-glibc
+          build-args: |
+            STDLIB=glibc
+            VERSION=${{ env.dimage_version }}
+            RELEASE_X64=${{ env.dimage_releases_glibc_x86_64_tag }}
+            RELEASE_AARCH64=${{ env.dimage_releases_glibc_aarch64_tag }}
+
+      - name: Sync README.md
+        uses: meeDamian/sync-readme@70e38f5bc63205951219b8e02afb1d6c1f57fa0a
+        with:
+          user: ${{ secrets.DOCKERHUB_USERNAME }}
+          pass: ${{ secrets.DOCKERHUB_PASS }}
+          slug: astarivi/alpaquita
+          readme: ./docker/alpaquita/README.md
+          description: "Alpaquita Linux: a lightweight, high-performance OS optimized for speed and efficiency"
