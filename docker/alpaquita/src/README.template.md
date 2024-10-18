@@ -17,31 +17,31 @@ Quote from [bellsoft/alpaquita-linux-base](https://hub.docker.com/r/bellsoft/alp
 
 # Latest tags
 
-## 23 (LTS)
-- `23-glibc-1.0`
-- `23-musl-1.0`
+## {ltsv} (LTS)
+- `{ltsv}-glibc-{ltst}`
+- `{ltsv}-musl-{ltst}`
 
 Aliases:
-- `23-glibc`
-- `23-musl`
+- `{ltsv}-glibc`
+- `{ltsv}-musl`
 
 Aliases:
 - `lts-glibc`
 - `lts-musl`
 
 ## stream
-- `stream-glibc-241015`
-- `stream-musl-241015`
+- `{edgev}-glibc-{edget}`
+- `{edgev}-musl-{edget}`
 
 Aliases:
-- `stream-glibc`
-- `stream-musl`
+- `{edgev}-glibc`
+- `{edgev}-musl`
 
-`latest` is `stream-musl`
+`latest` is `{edgev}-musl`
 
 ## Why another Alpaquita Linux container?
 
-While BellSoft distributes the [alpaquita-linux-base container](bellsoft/alpaquita-linux-base), their versioning scheme may not align with certain workflows.
+While BellSoft distributes the [alpaquita-linux-base container](https://hub.docker.com/r/bellsoft/alpaquita-linux-base), their versioning scheme may not align with certain workflows.
 
 This container provides a consistent and up-to-date versioning scheme for Alpaquita Linux to address this gap.
 

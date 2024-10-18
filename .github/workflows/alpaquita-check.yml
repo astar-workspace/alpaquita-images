@@ -1,0 +1,44 @@
+name: Check for newer Alpaquita Linux versions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  check-for-updates:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run your update script
+        run: |
+          cd docker/alpaquita/src && python3 release.py -l && python3 release.py -s
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Changes detected."
+            echo "changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes detected."
+            echo "changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "Alpaquita Updates CI"
+          git config --global user.email "111199883+astarivi@users.noreply.github.com"
+
+      - name: Push changes
+        if: env.changed == 'true'
+        run: |
+          git add .
+          git commit -m "Updated Alpaquita Linux version"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
