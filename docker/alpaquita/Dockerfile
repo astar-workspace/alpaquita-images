@@ -22,4 +22,5 @@ RUN apk add wget && \
 
 FROM scratch
 COPY --from=builder /root/rootfs/ /
+WORKDIR /root
 CMD ["/bin/sh"]
