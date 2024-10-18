@@ -1,4 +1,4 @@
-name: Build Alpaquita Base Image
+name: Build LTS Alpaquita Linux Base Image
 
 on:
   workflow_dispatch:
