@@ -7,7 +7,7 @@ on:
 
 jobs:
   check-for-updates:
-    runs-on: self-hosted
+    runs-on: light-executor
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -1,0 +1,138 @@
+# APORTS attributions:
+# Contributor: Jose-Luis Rivas <ghostbar@riseup.net> 
+# Contributor: Jakub Jirutka <jakub@jirutka.cz> 
+# Contributor: Dave Esaias <dave@containership.io> 
+# Contributor: Tadahisa Kamijo <kamijin@live.jp> 
+# Contributor: Eivind Uggedal <eu@eju.no> 
+# Original Maintainer: Jakub Jirutka <jakub@jirutka.cz>
+
+# astarivi: This is a modified nodejs APKBUILD file from Alpine
+# aports, aimed at providing a production-ready distribution of
+# the node binary, while keeping as much dynamic linking as
+# possible.
+
+pkgname=nodejs
+pkgver=20.18.0
+pkgrel=0
+pkgdesc="JavaScript runtime built on V8 engine - LTS version"
+url="https://nodejs.org/"
+arch="all"
+license="MIT"
+depends="ca-certificates"
+makedepends="
+	ada-dev
+	brotli-dev
+	c-ares-dev
+	icu-dev
+	linux-headers
+	nghttp2-dev
+	py3-jinja2
+	python3
+	samurai
+	zlib-dev
+	"
+install="$pkgname.post-upgrade"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	"
+provider_priority=100
+provides="nodejs-lts=$pkgver-r$pkgrel"
+replaces="nodejs-current nodejs-lts"
+source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
+	disable-running-gyp-on-shared-deps.patch
+	system-ada.patch
+	disable-sea-testing.patch
+	"
+builddir="$srcdir/node-v$pkgver"
+
+build() {
+	# Add defines recommended in libuv readme.
+	local common_flags="-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
+
+	export CFLAGS="${CFLAGS/-Os} $common_flags"
+	export CXXFLAGS="${CXXFLAGS/-Os} $common_flags"
+	export CPPFLAGS="${CPPFLAGS/-Os} $common_flags"
+
+	# NOTE: We use bundled libuv because they don't care much about backward
+	# compatibility and it has happened several times in past that we
+	# couldn't upgrade nodejs package in stable branches to fix CVEs due to
+	# libuv incompatibility.
+	#
+	# NOTE: We don't package the bundled npm - it's a separate project with
+	# its own release cycle and version numbering, so it's better to keep
+	# it in a standalone aport.
+	#
+	# astarivi: We use bundled openssl as using anything newer will cause 
+	# the following tests to fail:
+	#
+	# test/parallel/test-tls-cert-regression.js
+	# test/parallel/test-tls-client-getephemeralkeyinfo.js
+	# test/parallel/test-tls-getcipher.js
+	# test/parallel/test-tls-set-ciphers.js
+	# test/addons/openssl-providers/test-legacy-provider-config.js
+	# test/addons/openssl-providers/test-legacy-provider-option.js
+	# test/sequential/test-tls-session-timeout.js
+	# test/parallel/test-tls-junk-closes-server.js
+	#
+	# Related issue: https://github.com/nodejs/node/issues/53382
+	#
+	# astarivi: We also use "full-icu" for intl, as using "system-icu" will
+	# cause the following test to fail, due to unsupported encodings:
+	#
+	# test/wpt/test-encoding.js
+	#
+	# This seems to be an issue ack by upstream node, but they do not 
+	# plan on supporting "system-icu" builds. Building with "full-icu" also
+	# matches the default behaviour of node, which saves a few headaches
+	# to build consumers.
+	#
+	# astarivi: TODO: Shared base64 lib patches were removed, as they caused
+	# the linking stage to fail (and were broken due to changes in node.gyp). 
+	# It may be better to wait for upstream Alpine aports to fix base64 lib 
+	# support, rather than trying to do it here.
+	#
+	# astarivi: Disabled the following tests, as they always fail due to seagfault:
+	#
+	# test/sequential/test-single-executable-application.js
+	# test/sequential/test-single-executable-application-assets.js
+	# test/sequential/test-single-executable-application-assets-raw.js
+	# test/sequential/test-single-executable-application-disable-experimental-sea-warning.js
+	# test/sequential/test-single-executable-application-empty.js
+	# test/sequential/test-single-executable-application-snapshot.js
+	# test/sequential/test-single-executable-application-snapshot-and-code-cache.js
+	# test/sequential/test-single-executable-application-use-code-cache.js
+	#
+	# TODO: Enable once SEA is stable enough (probably is in 22). This seems to be an issue
+	# that is already fixed in current branch.
+
+	python3 configure.py \
+		--prefix=/usr \
+		--ninja \
+		--enable-lto \
+		--shared-brotli \
+		--shared-zlib \
+		--shared-cares \
+		--shared-nghttp2 \
+		--openssl-use-def-ca-store \
+		--with-icu-default-data-dir=$(icu-config --icudatadir) \
+		--with-intl=full-icu \
+		--without-npm
+
+	make BUILDTYPE=Release
+}
+
+check() {
+	make NODE="$builddir/out/Release/node" test-only
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+961d1823e1c66d12060c12984c7a85e5aeb69c24197c66dcdf3619f6d06142da0f0f2d2200679ad5a02398ad8b420ae8bac2eb5e68aa1c5a86988cd8e2fb7cc3  node-v20.18.0.tar.gz
+8c264eefc0bfa9dd57656f9f515e940d5c21b8d836dc549031ee559ba909643f4f2495b8b392ee9976c5eed7c3b4a09db876bbe0f7fcd5b2bf63fafca37bffc2  disable-running-gyp-on-shared-deps.patch
+29784f212c2a60e79c0971a40ac2517576b761bbbef09e524c172c4f9d887e9451e030bcb181ac367fa4fe10083fde5aa6e58f1f01512e02455147ae91b1bec8  system-ada.patch
+adb4b76dc924b3ee1da7b80bcb636cfdbd5122fe88e8c8b271fb2171935af5f69ec78f530e61ebc960693e3b7eed9dcc948652bae90ff48b47b43157bfa3af3e  disable-sea-testing.patch
+"

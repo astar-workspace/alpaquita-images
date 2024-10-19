@@ -1,0 +1,17 @@
+diff --git a/test/sequential/sequential.status b/test/sequential/sequential.status
+index a539649..d6bd60b 100644
+--- a/test/sequential/sequential.status
++++ b/test/sequential/sequential.status
+@@ -12,6 +12,14 @@ test-watch-mode: PASS, FLAKY
+ test-watch-mode-inspect: PASS, FLAKY
+ # https://github.com/nodejs/node/issues/47409
+ test-http2-large-file: PASS, FLAKY
++test-single-executable-application-assets-raw: SKIP
++test-single-executable-application-assets: SKIP
++test-single-executable-application-disable-experimental-sea-warning: SKIP
++test-single-executable-application-empty: SKIP
++test-single-executable-application-snapshot-and-code-cache: SKIP
++test-single-executable-application-snapshot: SKIP
++test-single-executable-application-use-code-cache: SKIP
++test-single-executable-application: SKIP
+ 
