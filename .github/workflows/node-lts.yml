@@ -54,11 +54,11 @@ jobs:
           platforms: linux/arm64,linux/amd64
           tags: |
             astarivi/node-alpaquita:lts-alpaquita-stream-musl
-            astarivi/node-alpaquita:$PKGVER-alpaquita-stream-musl
-            astarivi/node-alpaquita:$MAJOR_VERSION-alpaquita-stream-musl
+            astarivi/node-alpaquita:${{ env.PKGVER }}-alpaquita-stream-musl
+            astarivi/node-alpaquita:${{ env.MAJOR_VERSION }}-alpaquita-stream-musl
             astarivi/node-alpaquita:lts-alpaquita-stream-musl-${{ env.streamimage_tag }}
-            astarivi/node-alpaquita:$PKGVER-alpaquita-stream-musl-${{ env.streamimage_tag }}
-            astarivi/node-alpaquita:$MAJOR_VERSION-alpaquita-stream-musl-${{ env.streamimage_tag }}
+            astarivi/node-alpaquita:${{ env.PKGVER }}-alpaquita-stream-musl-${{ env.streamimage_tag }}
+            astarivi/node-alpaquita:${{ env.MAJOR_VERSION }}-alpaquita-stream-musl-${{ env.streamimage_tag }}
           build-args: |
             BASE_IMAGE=stream-musl-${{ env.streamimage_tag }}
         
@@ -72,56 +72,13 @@ jobs:
           platforms: linux/arm64,linux/amd64
           tags: |
             astarivi/node-alpaquita:lts-alpaquita-stream-glibc
-            astarivi/node-alpaquita:$PKGVER-alpaquita-stream-glibc
-            astarivi/node-alpaquita:$MAJOR_VERSION-alpaquita-stream-glibc
+            astarivi/node-alpaquita:${{ env.PKGVER }}-alpaquita-stream-glibc
+            astarivi/node-alpaquita:${{ env.MAJOR_VERSION }}-alpaquita-stream-glibc
             astarivi/node-alpaquita:lts-alpaquita-stream-glibc-${{ env.streamimage_tag }}
-            astarivi/node-alpaquita:$PKGVER-alpaquita-stream-glibc-${{ env.streamimage_tag }}
-            astarivi/node-alpaquita:$MAJOR_VERSION-alpaquita-stream-glibc-${{ env.streamimage_tag }}
+            astarivi/node-alpaquita:${{ env.PKGVER }}-alpaquita-stream-glibc-${{ env.streamimage_tag }}
+            astarivi/node-alpaquita:${{ env.MAJOR_VERSION }}-alpaquita-stream-glibc-${{ env.streamimage_tag }}
           build-args: |
             BASE_IMAGE=stream-glibc-${{ env.streamimage_tag }}
-
-      # # Compile LTS
-      # - name: Build and push lts musl
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./aports/universe/
-      #     file: docker/node/Dockerfile.lts
-      #     push: true
-      #     builder: multiarch
-      #     platforms: linux/arm64,linux/amd64
-      #     tags: |
-      #       astarivi/node-alpaquita:lts-lts-musl
-      #       astarivi/node-alpaquita:$PKGVER-lts-musl
-      #       astarivi/node-alpaquita:$MAJOR_VERSION-lts-musl
-      #       astarivi/node-alpaquita:lts-${{ env.ltsimage_version }}-musl
-      #       astarivi/node-alpaquita:$PKGVER-${{ env.ltsimage_version }}-musl
-      #       astarivi/node-alpaquita:$MAJOR_VERSION-${{ env.ltsimage_version }}-musl
-      #       astarivi/node-alpaquita:lts-${{ env.ltsimage_version }}-musl-${{ env.ltsimage_tag }}
-      #       astarivi/node-alpaquita:$PKGVER-${{ env.ltsimage_version }}-musl-${{ env.ltsimage_tag }}
-      #       astarivi/node-alpaquita:$MAJOR_VERSION-${{ env.ltsimage_version }}-musl-${{ env.ltsimage_tag }}
-      #     build-args: |
-      #       BASE_IMAGE=lts-musl-${{ env.ltsimage_tag }}
-
-      # - name: Build and push lts glibc
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./aports/universe/
-      #     file: docker/node/Dockerfile.lts
-      #     push: true
-      #     builder: multiarch
-      #     platforms: linux/arm64,linux/amd64
-      #     tags: |
-      #       astarivi/node-alpaquita:lts-lts-glibc
-      #       astarivi/node-alpaquita:$PKGVER-lts-glibc
-      #       astarivi/node-alpaquita:$MAJOR_VERSION-lts-glibc
-      #       astarivi/node-alpaquita:lts-${{ env.ltsimage_version }}-glibc
-      #       astarivi/node-alpaquita:$PKGVER-${{ env.ltsimage_version }}-glibc
-      #       astarivi/node-alpaquita:$MAJOR_VERSION-${{ env.ltsimage_version }}-glibc
-      #       astarivi/node-alpaquita:lts-${{ env.ltsimage_version }}-glibc-${{ env.ltsimage_tag }}
-      #       astarivi/node-alpaquita:$PKGVER-${{ env.ltsimage_version }}-glibc-${{ env.ltsimage_tag }}
-      #       astarivi/node-alpaquita:$MAJOR_VERSION-${{ env.ltsimage_version }}-glibc-${{ env.ltsimage_tag }}
-      #     build-args: |
-      #       BASE_IMAGE=${{ env.ltsimage_version }}-glibc-${{ env.ltsimage_tag }}
 
       - name: Sync README.md
         uses: meeDamian/sync-readme@v1.0.6
