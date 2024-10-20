@@ -37,11 +37,10 @@ RUN abuild deps &&\
 
 FROM docker.io/astarivi/alpaquita:${BASE_IMAGE}
 
-ARG ARCH=$(uname -m)
-
 WORKDIR /root
-COPY --from=builder /home/build_user/packages/build/${ARCH} /root
-RUN rm -f *-dev* *-doc* *-completion* &&\
+COPY --from=builder /home/build_user/packages/build /root
+RUN cd */ &&\
+    rm -f *-dev* *-doc* *-completion* &&\
     apk add --no-cache --allow-untrusted nodejs*.apk &&\
     apk add --no-cache --allow-untrusted npm*.apk &&\
     apk add --no-cache --allow-untrusted yarn*.apk &&\
