@@ -11,12 +11,13 @@
 # the node binary, while keeping as much dynamic linking as
 # possible.
 
-pkgname=nodejs
+pkgname=node20
 pkgver=20.18.0
 pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine - LTS version"
 url="https://nodejs.org/"
-arch="all"
+arch="x86_64 aarch64"
+maintainer="astarivi <astarivi@aol.com>"
 license="MIT"
 depends="ca-certificates"
 makedepends="
@@ -31,14 +32,13 @@ makedepends="
 	samurai
 	zlib-dev
 	"
-install="$pkgname.post-upgrade"
 subpackages="
 	$pkgname-dev
 	$pkgname-doc
 	"
 provider_priority=100
-provides="nodejs-lts=$pkgver-r$pkgrel"
-replaces="nodejs-current nodejs-lts"
+provides="nodejs"
+replaces="nodejs nodejs-current nodejs-lts"
 source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
 	disable-running-gyp-on-shared-deps.patch
 	system-ada.patch
@@ -91,7 +91,7 @@ build() {
 	# astarivi: TODO: Shared base64 lib patches were removed, as they caused
 	# the linking stage to fail (and were broken due to changes in node.gyp). 
 	# It may be better to wait for upstream Alpine aports to fix base64 lib 
-	# support, rather than trying to do it here.
+	# support, rather than trying to fix it here.
 	#
 	# astarivi: Disabled the following tests, as they always fail due to seagfault:
 	#
@@ -104,15 +104,17 @@ build() {
 	# test/sequential/test-single-executable-application-snapshot-and-code-cache.js
 	# test/sequential/test-single-executable-application-use-code-cache.js
 	#
+	# These tests also fail on the official node binary.
 	# TODO: Enable once SEA is stable enough (probably is in 22). This seems to be an issue
 	# that is already fixed in current branch.
 	#
-	# astarivi: Disabled the following tests, as they fail due to the build system:
+	# astarivi: Disabled the following tests, as they fail due to the build system 
+	# (buildx container):
 	#
 	# test-cluster-shared-handle-bind-privileged-port
 	#
 	# Not testing for this case is likely not an issue, as privileged ports are handled
-	# by host permissions anyway.
+	# by host permissions anyway, and other tests already do port testing.
 
 	python3 configure.py \
 		--prefix=/usr \
@@ -136,6 +138,10 @@ check() {
 
 package() {
 	make DESTDIR="$pkgdir" install
+
+	# Remove unused openssl headers. Issue: https://github.com/nodejs/node/issues/46451
+	# If more architectures are needed, the value of the "linux" prefix should change dynamically (ex: linux64)
+	find "$pkgdir/usr/include/node/openssl/archs" -mindepth 1 -maxdepth 1 ! -name "linux-$CARCH" -exec rm -rf -- {} \;
 }
 
 sha512sums="

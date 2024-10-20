@@ -11,7 +11,9 @@ RUN echo "build_user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
     adduser -D build_user &&\
     addgroup build_user abuild
 
-COPY ./nodejs /build/nodejs
+ARG NODE_PKG=node20
+
+COPY ./${NODE_PKG} /build/nodejs
 COPY ./npm /build/npm
 COPY ./yarn /build/yarn
 
@@ -41,7 +43,7 @@ WORKDIR /root
 COPY --from=builder /home/build_user/packages/build /root
 RUN cd */ &&\
     rm -f *-dev* *-doc* *-completion* &&\
-    apk add --no-cache --allow-untrusted nodejs*.apk &&\
+    apk add --no-cache --allow-untrusted node*.apk &&\
     apk add --no-cache --allow-untrusted npm*.apk &&\
     apk add --no-cache --allow-untrusted yarn*.apk &&\
     rm -rf /root/*
