@@ -142,7 +142,6 @@ package() {
 	# Remove unused openssl headers. Issue: https://github.com/nodejs/node/issues/46451
 	# If more architectures are needed, the value of the "linux" prefix should change dynamically (ex: linux64)
 	find "$pkgdir/usr/include/node/openssl/archs" -mindepth 1 -maxdepth 1 ! -name "linux-$CARCH" -exec rm -rf -- {} \;
-	find "$pkgdir/nodejs/usr/include/node/openssl/archs" -mindepth 1 -maxdepth 1 ! -name "linux-$CARCH" -exec rm -rf -- {} \;
 }
 
 sha512sums="
