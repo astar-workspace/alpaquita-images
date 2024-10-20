@@ -1,5 +1,4 @@
-ARG BASE_IMAGE
-ARG ARCH=$(uname -m)
+ARG BASE_IMAGE=latest
 FROM docker.io/astarivi/alpaquita:${BASE_IMAGE} AS builder
 
 # Install build dependencies
@@ -37,6 +36,8 @@ RUN abuild deps &&\
     abuild -r
 
 FROM docker.io/astarivi/alpaquita:${BASE_IMAGE}
+
+ARG ARCH=$(uname -m)
 
 WORKDIR /root
 COPY --from=builder /home/build_user/packages/build/${ARCH} /root
