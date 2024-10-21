@@ -1,4 +1,4 @@
-name: Check for newer Alpaquita Linux versions
+name: Check for new Alpaquita Linux versions
 
 on:
   workflow_dispatch:
