@@ -30,8 +30,8 @@ Aliases:
 - `lts-musl`
 
 ## stream
-- `stream-glibc-241015`
-- `stream-musl-241015`
+- `stream-glibc-241020`
+- `stream-musl-241020`
 
 Aliases:
 - `stream-glibc`
@@ -41,7 +41,7 @@ Aliases:
 
 ## Why another Alpaquita Linux container?
 
-While BellSoft distributes the [alpaquita-linux-base container](bellsoft/alpaquita-linux-base), their versioning scheme may not align with certain workflows.
+While BellSoft distributes the [alpaquita-linux-base container](https://hub.docker.com/r/bellsoft/alpaquita-linux-base), their versioning scheme may not align with certain workflows.
 
 This container provides a consistent and up-to-date versioning scheme for Alpaquita Linux to address this gap.
 
