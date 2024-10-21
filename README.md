@@ -22,6 +22,7 @@ Quote from [bellsoft/alpaquita-linux-base](https://hub.docker.com/r/bellsoft/alp
 ## Images
 
 - ### [Alpaquita Linux](https://hub.docker.com/r/astarivi/alpaquita)
+- ### [Node.js](https://hub.docker.com/r/astarivi/node-alpaquita)
 
 ## Reference
 
