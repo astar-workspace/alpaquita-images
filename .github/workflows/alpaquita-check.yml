@@ -14,19 +14,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run your update script
+      - name: Run update script
         run: |
           cd docker/alpaquita/src && python3 release.py -l && python3 release.py -s
 
       - name: Check for changes
         id: check_changes
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Changes detected."
-            echo "changed=true" >> $GITHUB_ENV
-          else
-            echo "No changes detected."
-            echo "changed=false" >> $GITHUB_ENV
+          changed_files=$(git diff --name-only)
+
+          if echo "$changed_files" | grep -q "docker/alpaquita/src/latest_stream.json"; then
+            echo "STREAM_RELEASE=true" >> $GITHUB_ENV
+          fi
+
+          if echo "$changed_files" | grep -q "docker/alpaquita/src/latest_lts.json"; then
+            echo "LTS_RELEASE=true" >> $GITHUB_ENV
+          fi
+
+          if [ -n "$changed_files" ]; then
+            echo "CHANGED=true" >> $GITHUB_ENV
           fi
 
       - name: Configure Git
@@ -35,10 +41,22 @@ jobs:
           git config --global user.email "111199883+astarivi@users.noreply.github.com"
 
       - name: Push changes
-        if: env.changed == 'true'
+        if: env.CHANGED == 'true'
         run: |
           git add .
           git commit -m "Updated Alpaquita Linux version"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger stream release workflow
+        if: env.STREAM_RELEASE == 'true'
+        uses: benc-uk/workflow-dispatch@v1.2.4
+        with:
+          workflow: alpaquita-stream.yml
+
+      - name: Trigger lts release workflow
+        if: env.LTS_RELEASE == 'true'
+        uses: benc-uk/workflow-dispatch@v1.2.4
+        with:
+          workflow: alpaquita-lts.yml
