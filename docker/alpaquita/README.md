@@ -18,8 +18,8 @@ Quote from [bellsoft/alpaquita-linux-base](https://hub.docker.com/r/bellsoft/alp
 # Latest tags
 
 ## 23 (LTS)
-- `23-glibc-1.4`
-- `23-musl-1.4`
+- `23-glibc-1.5`
+- `23-musl-1.5`
 
 Aliases:
 - `23-glibc`
@@ -30,8 +30,8 @@ Aliases:
 - `lts-musl`
 
 ## stream
-- `stream-glibc-250523`
-- `stream-musl-250523`
+- `stream-glibc-250528`
+- `stream-musl-250528`
 
 Aliases:
 - `stream-glibc`
