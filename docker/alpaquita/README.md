@@ -30,8 +30,8 @@ Aliases:
 - `lts-musl`
 
 ## stream
-- `stream-glibc-260301`
-- `stream-musl-260301`
+- `stream-glibc-260303`
+- `stream-musl-260303`
 
 Aliases:
 - `stream-glibc`
