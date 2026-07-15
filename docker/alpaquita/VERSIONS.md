@@ -182,3 +182,7 @@ Alpaquita Linux is packaged using dates. This file contains all the versions dat
 - stream-glibc-260521: x86_64=260521 aarch64=260521
 - 23-musl-2.8: x86_64=260524 aarch64=260524
 - 23-glibc-2.8: x86_64=260524 aarch64=260524
+- 23-musl-2.9: x86_64=260714 aarch64=260714
+- 23-glibc-2.9: x86_64=260714 aarch64=260714
+- stream-musl-260714: x86_64=260714 aarch64=260714
+- stream-glibc-260714: x86_64=260714 aarch64=260714
