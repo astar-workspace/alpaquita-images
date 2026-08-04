@@ -18,8 +18,8 @@ Quote from [bellsoft/alpaquita-linux-base](https://hub.docker.com/r/bellsoft/alp
 # Latest tags
 
 ## 23 (LTS)
-- `23-glibc-2.9`
-- `23-musl-2.9`
+- `23-glibc-3.0`
+- `23-musl-3.0`
 
 Aliases:
 - `23-glibc`
